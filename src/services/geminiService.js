@@ -6,7 +6,7 @@ if (!API_KEY) {
   console.warn("API key is not configured");
 }
 
-const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 /**
  * Generate quiz questions from text or document content
@@ -103,7 +103,17 @@ export async function generateQuizFromText(docText, numQuestions = 10) {
   } catch (error) {
     console.error("Error generating quiz:", error);
     
-    // Check for specific API errors
+    if (error.response?.status === 403) {
+      const geminiError = error.response?.data?.error?.message || "Access forbidden";
+      if (geminiError.includes("billing") || geminiError.includes("quota")) {
+        throw new Error("API quota exceeded or billing required. Please check your Google Cloud billing settings.");
+      }
+      if (geminiError.includes("permission") || geminiError.includes("access")) {
+        throw new Error("API access denied. Please check if Gemini API is enabled for your project.");
+      }
+      throw new Error(`API access forbidden: ${geminiError}`);
+    }
+    
     if (error.response?.status === 400) {
       if (error.response?.data?.error?.message?.includes("API_KEY_INVALID")) {
         throw new Error("Invalid API key. Please check your Google Gemini API key configuration.");
