@@ -6,7 +6,8 @@ if (!API_KEY) {
   console.warn("API key is not configured");
 }
 
-const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
+const FALLBACK_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 /**
  * Generate quiz questions from text or document content
@@ -60,15 +61,29 @@ export async function generateQuizFromText(docText, numQuestions = 10) {
     }
 
     console.log("Sending request to Gemini API...");
-    const response = await axios.post(BASE_URL, {
-      contents: contents,
-      generationConfig: {
-        temperature: 0.7,
-        topK: 40,
-        topP: 0.95,
-        maxOutputTokens: 8192,
-      }
-    });
+    let response;
+    try {
+      response = await axios.post(BASE_URL, {
+        contents: contents,
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 8192,
+        }
+      });
+    } catch (primaryError) {
+      console.log("Primary model failed, trying fallback model...");
+      response = await axios.post(FALLBACK_URL, {
+        contents: contents,
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 8192,
+        }
+      });
+    }
 
     let textResponse = response.data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
     
