@@ -1,6 +1,6 @@
 // Production API key (replace with your actual key for deployment)
 // Get your key from: https://makersuite.google.com/app/apikey
-const PRODUCTION_API_KEY = "AIzaSyBa1-gDGVcoN5SfephviWmAMaEhPbI99tc";
+const PRODUCTION_API_KEY = "AIzaSyCHGNMHBuHcz2fxGy7iyWAe8hYYJFAo1mM";
 
 // Development API key from .env file
 const DEV_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;

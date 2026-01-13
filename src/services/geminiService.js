@@ -6,8 +6,7 @@ if (!API_KEY) {
   console.warn("API key is not configured");
 }
 
-const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
-const FALLBACK_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
 /**
  * Generate quiz questions from text or document content
@@ -61,29 +60,15 @@ export async function generateQuizFromText(docText, numQuestions = 10) {
     }
 
     console.log("Sending request to Gemini API...");
-    let response;
-    try {
-      response = await axios.post(BASE_URL, {
-        contents: contents,
-        generationConfig: {
-          temperature: 0.7,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 8192,
-        }
-      });
-    } catch (primaryError) {
-      console.log("Primary model failed, trying fallback model...");
-      response = await axios.post(FALLBACK_URL, {
-        contents: contents,
-        generationConfig: {
-          temperature: 0.7,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 8192,
-        }
-      });
-    }
+    const response = await axios.post(BASE_URL, {
+      contents: contents,
+      generationConfig: {
+        temperature: 0.7,
+        topK: 40,
+        topP: 0.95,
+        maxOutputTokens: 8192,
+      }
+    });
 
     let textResponse = response.data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
     
@@ -117,40 +102,30 @@ export async function generateQuizFromText(docText, numQuestions = 10) {
     return parsed.quiz.slice(0, numQuestions);
   } catch (error) {
     console.error("Error generating quiz:", error);
-    
-    if (error.response?.status === 403) {
-      const geminiError = error.response?.data?.error?.message || "Access forbidden";
-      if (geminiError.includes("billing") || geminiError.includes("quota")) {
-        throw new Error("API quota exceeded or billing required. Please check your Google Cloud billing settings.");
-      }
-      if (geminiError.includes("permission") || geminiError.includes("access")) {
-        throw new Error("API access denied. Please check if Gemini API is enabled for your project.");
-      }
-      throw new Error(`API access forbidden: ${geminiError}`);
-    }
-    
+
+    // Check for specific API errors
     if (error.response?.status === 400) {
       if (error.response?.data?.error?.message?.includes("API_KEY_INVALID")) {
         throw new Error("Invalid API key. Please check your Google Gemini API key configuration.");
       }
       throw new Error("Invalid request to Gemini API. Please try with different content.");
     }
-    
+
     if (error.response?.status === 429) {
       throw new Error("API rate limit exceeded. Please wait a moment and try again.");
     }
-    
+
     if (error.response?.data?.error) {
       const geminiError = error.response.data.error.message;
       if (geminiError.includes("file") || geminiError.includes("document")) {
         throw new Error("Gemini couldn't process the document. Please try a text file or paste the content directly.");
       }
     }
-    
+
     if (error.code === 'NETWORK_ERROR' || error.message.includes('Network Error')) {
       throw new Error("Network error. Please check your internet connection and try again.");
     }
-    
+
     throw new Error("Failed to generate quiz. Please try again.");
   }
 }
