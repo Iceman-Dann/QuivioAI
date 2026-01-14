@@ -9,12 +9,12 @@ export const API_CONFIG = {
     getKey: () => import.meta.env.VITE_GEMINI_API_KEY,
     
     // Base URL for Gemini API
-    getBaseUrl: () => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`,
+    getBaseUrl: () => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`,
     
     // Full URL with API key
     getFullUrl: () => {
       const key = import.meta.env.VITE_GEMINI_API_KEY;
-      return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+      return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`;
     },
     
     // Check if API is configured
