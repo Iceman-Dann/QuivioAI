@@ -1,6 +1,7 @@
 {
   "name": "quivio_ai",
   "version": "0.0.0",
+  "description": "QuivioAI - AI-Powered Educational Platform - Updated: 2026-01-14",
   "private": true,
   "type": "module",
   "homepage": "https://iceman-dann.github.io/QuivioAI/",
