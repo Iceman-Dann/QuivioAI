@@ -6,7 +6,7 @@ export default function DeveloperCard({ name, image, role, bio }) {
       <p className="text-sm text-gray-500">{role}</p>
       <p className="text-sm text-gray-600 mt-3">{bio}</p>
       <div className="mt-4">
-        <a href="mailto:md.afan@example.com" className="text-sm text-blue-600 underline">Contact</a>
+        <a href="mailto:contact@quivioai.com" className="text-sm text-blue-600 underline">Contact</a>
       </div>
     </div>
   );
