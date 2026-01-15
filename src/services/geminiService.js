@@ -1,8 +1,7 @@
 import axios from "axios";
-import { getApiKey } from "../config/apiKey.js";
+import API_KEY from "../config/apiKey.js";
 
 // Log for debugging (remove in production)
-const API_KEY = getApiKey();
 if (!API_KEY) {
   console.warn("API key is not configured");
 }
@@ -14,12 +13,9 @@ if (!API_KEY) {
  * @returns {Promise<Array>} Array of quiz questions
  */
 export async function generateQuizFromText(docText, numQuestions = 10) {
-  // Get API key dynamically
-  const API_KEY = getApiKey();
-  
   // Check if API key is available
   if (!API_KEY || API_KEY === "") {
-    throw new Error("API key is not configured. Please add your Gemini API key to continue.");
+    throw new Error("API key is not configured. Please check your environment settings.");
   }
 
   try {
@@ -271,12 +267,11 @@ function generateFallbackQuiz(numQuestions) {
  * Optional: Validate API key format
  */
 export function validateApiKey() {
-  const key = getApiKey();
-  if (!key) {
+  if (!API_KEY) {
     return { valid: false, message: "API key is not set" };
   }
   
-  if (key.startsWith("AIza")) {
+  if (API_KEY.startsWith("AIza")) {
     return { valid: true, message: "API key format appears valid" };
   }
   

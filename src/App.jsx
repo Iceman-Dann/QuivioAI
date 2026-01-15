@@ -1,6 +1,5 @@
 // src/App.jsx
 import { useState, useEffect } from "react";
-import { getApiKey } from "./config/apiKey.js";
 import {
   Brain,
   Upload,
@@ -22,9 +21,6 @@ import {
   Shield,
   Award,
   TrendingUp,
-  Calendar,
-  Mail,
-  Linkedin,
 } from "lucide-react";
 
 import DocumentUpload from "./components/DocumentUpload.jsx";
@@ -47,7 +43,7 @@ function App() {
   const [docText, setDocText] = useState("");
   const [quiz, setQuiz] = useState([]);
   const [quizResults, setQuizResults] = useState(null);
-  const [numQuestions, setNumQuestions] = useState(20); // Default increased from 15 to 20
+  const [numQuestions, setNumQuestions] = useState(15); // Default decreased from 20 to 15
   const [activeTab, setActiveTab] = useState("upload");
 
   // New state variables for modals
@@ -130,11 +126,6 @@ function App() {
   };
 
   const handleStart = (tab = "upload") => {
-    const apiKey = getApiKey();
-    if (!apiKey && window.location.hostname.includes('github.io')) {
-      setShowApiKeyModal(true);
-      return;
-    }
     setActiveTab(tab);
     setCurrentView("quiz");
   };
