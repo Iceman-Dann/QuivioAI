@@ -37,6 +37,12 @@ export default function ApiKeyModal({ onClose, onKeySet }) {
           To use QuivioAI, you need a Google Gemini API key. Get your free key from:
         </p>
         
+        <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg mb-4">
+          <p className="text-sm text-blue-700">
+            <strong>Demo Key Available:</strong> Use the provided key for testing
+          </p>
+        </div>
+        
         <a 
           href="https://makersuite.google.com/app/apikey" 
           target="_blank" 
@@ -58,7 +64,7 @@ export default function ApiKeyModal({ onClose, onKeySet }) {
                 setApiKey(e.target.value);
                 setError('');
               }}
-              placeholder="AIzaSy..."
+              placeholder="AIzaSyALx-VO0rfah_NVEv0t-lsxnu7B61nJ6Bw"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
