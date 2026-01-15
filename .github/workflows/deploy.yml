@@ -1,0 +1,91 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+      
+    - name: Install dependencies (QuizGen_AI)
+      run: |
+        cd QuizGen_AI
+        npm ci
+        
+    - name: Install dependencies (QuivioAI-Fresh)
+      run: |
+        cd QuivioAI-Fresh
+        npm ci
+        
+    - name: Build QuizGen_AI
+      run: |
+        cd QuizGen_AI
+        echo "VITE_GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
+        npm run build
+        
+    - name: Build QuivioAI-Fresh
+      run: |
+        cd QuivioAI-Fresh
+        echo "VITE_GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
+        npm run build
+        
+    - name: Setup artifact for QuizGen_AI
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./QuizGen_AI/dist
+        
+    - name: Setup artifact for QuivioAI-Fresh
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./QuivioAI-Fresh/dist
+
+  deploy-quizgen:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy to GitHub Pages (QuizGen)
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+  deploy-quivio:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy to GitHub Pages (Quivio)
+      id: deployment
+      uses: actions/deploy-pages@v4
