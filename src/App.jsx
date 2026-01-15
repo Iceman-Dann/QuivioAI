@@ -65,9 +65,12 @@ function App() {
 
   // Check for API key on mount and also check periodically
   useEffect(() => {
+    console.log(' App mounted - checking API key...');
     const checkApiKey = () => {
       const apiKey = getApiKey();
+      console.log(' API key check result:', apiKey ? 'found' : 'not found');
       if (!apiKey && window.location.hostname.includes('github.io')) {
+        console.log(' Showing API key modal');
         setShowApiKeyModal(true);
       }
     };
