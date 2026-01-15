@@ -1,14 +1,36 @@
 // API key configuration
 // Get your key from: https://makersuite.google.com/app/apikey
-// For production deployment, we embed the key for demo purposes
 
 // Check if we're in production (GitHub Pages)
 const isProduction = import.meta.env.PROD || window.location.hostname.includes('github.io');
 
-// Production API key for demo (limited usage)
-const PRODUCTION_API_KEY = "AIzaSyBIDSVMa90nKeHrrpuCJmZ3yp2G_aoF9js";
+// For demo: Store API key in sessionStorage for the session
+let DEMO_API_KEY = null;
 
-// Use production key in production, environment key in development
-const API_KEY = isProduction ? PRODUCTION_API_KEY : import.meta.env.VITE_GEMINI_API_KEY;
+// Export function to get API key with demo fallback
+export function getApiKey() {
+  // Use environment variable if available
+  if (import.meta.env.VITE_GEMINI_API_KEY) {
+    return import.meta.env.VITE_GEMINI_API_KEY;
+  }
+  
+  // For demo: Check sessionStorage
+  if (isProduction) {
+    if (!DEMO_API_KEY) {
+      DEMO_API_KEY = sessionStorage.getItem('quivio_demo_api_key');
+    }
+    return DEMO_API_KEY;
+  }
+  
+  return null;
+}
 
-export default API_KEY;
+// Function to set demo API key
+export function setDemoApiKey(key) {
+  DEMO_API_KEY = key;
+  if (isProduction) {
+    sessionStorage.setItem('quivio_demo_api_key', key);
+  }
+}
+
+export default import.meta.env.VITE_GEMINI_API_KEY || null;

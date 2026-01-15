@@ -35,6 +35,7 @@ import UserFormModal from "./components/UserFormModal";
 import ConfirmationModal from "./components/ConfirmationModal";
 import Technology from "./components/Technology";
 import Documentation from "./components/Documentation";
+import ApiKeyModal from "./components/ApiKeyModal";
 import profile from'./assets/profile.png';
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [showUserForm, setShowUserForm] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState("");
 
   useEffect(() => {
@@ -485,6 +487,12 @@ function App() {
         userData={userData}
         numQuestions={numQuestions}
         fileName={uploadedFileName}
+      />
+
+      <ApiKeyModal
+        isOpen={showApiKeyModal}
+        onClose={() => setShowApiKeyModal(false)}
+        onKeySet={() => setShowApiKeyModal(false)}
       />
 
       <div className="max-w-4xl mx-auto">

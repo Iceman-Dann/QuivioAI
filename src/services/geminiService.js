@@ -1,12 +1,11 @@
 import axios from "axios";
-import API_KEY from "../config/apiKey.js";
+import { getApiKey } from "../config/apiKey.js";
 
 // Log for debugging (remove in production)
+const API_KEY = getApiKey();
 if (!API_KEY) {
   console.warn("API key is not configured");
 }
-
-const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
 /**
  * Generate quiz questions from text or document content
@@ -15,9 +14,12 @@ const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini
  * @returns {Promise<Array>} Array of quiz questions
  */
 export async function generateQuizFromText(docText, numQuestions = 10) {
+  // Get API key dynamically
+  const API_KEY = getApiKey();
+  
   // Check if API key is available
   if (!API_KEY || API_KEY === "") {
-    throw new Error("API key is not configured. Please check your environment settings.");
+    throw new Error("API key is not configured. Please add your Gemini API key to continue.");
   }
 
   try {
@@ -60,6 +62,7 @@ export async function generateQuizFromText(docText, numQuestions = 10) {
     }
 
     console.log("Sending request to Gemini API...");
+    const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
     const response = await axios.post(BASE_URL, {
       contents: contents,
       generationConfig: {
@@ -268,11 +271,12 @@ function generateFallbackQuiz(numQuestions) {
  * Optional: Validate API key format
  */
 export function validateApiKey() {
-  if (!API_KEY) {
-    return { valid: false, message: "API key is not set in environment variables" };
+  const key = getApiKey();
+  if (!key) {
+    return { valid: false, message: "API key is not set" };
   }
   
-  if (API_KEY.startsWith("AIza")) {
+  if (key.startsWith("AIza")) {
     return { valid: true, message: "API key format appears valid" };
   }
   
