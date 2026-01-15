@@ -1,8 +1,10 @@
 # QuivioAI - AI-Powered Quiz Generator
 
-**Deployed with GitHub Actions Secret - Ready for Judging!**
+🚀 **Deployed with GitHub Actions Secret - Ready for Judging!** 🚀
 
 Built for Nexora Hacks 2026 • [Live Demo](https://iceman-dann.github.io/QuivioAI/)
+
+**Status**: GitHub Actions workflow configured - waiting for secret to be added
 
 ## Overview
 
