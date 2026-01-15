@@ -1,6 +1,8 @@
-# Quivio AI - Advanced AI Quiz Generator
+# QuivioAI - AI-Powered Quiz Generator
 
-**Nexora Hacks 2026 Submission** • [Live Demo](https://iceman-dann.github.io/QuivioAI/)
+**Deployed with GitHub Actions Secret - Ready for Judging!**
+
+Built for Nexora Hacks 2026 • [Live Demo](https://iceman-dann.github.io/QuivioAI/)
 
 ## Overview
 
