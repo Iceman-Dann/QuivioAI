@@ -1,3 +1,3 @@
 // API key configuration
 // Get your key from: https://makersuite.google.com/app/apikey
-export default import.meta.env.VITE_GEMINI_API_KEY;
+export default "AIzaSyALx-VO0rfah_NVEv0t-lsxnu7B61nJ6Bw";
