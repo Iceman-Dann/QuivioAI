@@ -4,7 +4,7 @@
 
 Built for Nexora Hacks 2026 • [Live Demo](https://iceman-dann.github.io/QuivioAI/)
 
-**Status**: GitHub Actions workflow configured with dual deployment - waiting for secret to be added
+**Status**: ✅ Secret added - GitHub Pages workflow running with API key!
 
 ## Overview
 
