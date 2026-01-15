@@ -63,12 +63,31 @@ function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Check for API key on mount
+  // Check for API key on mount and also check periodically
   useEffect(() => {
-    const apiKey = getApiKey();
-    if (!apiKey && window.location.hostname.includes('github.io')) {
-      // Show API key modal for GitHub Pages deployment
-      setShowApiKeyModal(true);
+    const checkApiKey = () => {
+      const apiKey = getApiKey();
+      if (!apiKey && window.location.hostname.includes('github.io')) {
+        setShowApiKeyModal(true);
+      }
+    };
+    
+    checkApiKey();
+    
+    // Also check when user tries to start quiz
+    const handleStartWithApiKeyCheck = (tab = "upload") => {
+      const apiKey = getApiKey();
+      if (!apiKey) {
+        setShowApiKeyModal(true);
+        return;
+      }
+      setActiveTab(tab);
+      setCurrentView("quiz");
+    };
+    
+    // Override the handleStart function temporarily
+    if (!getApiKey()) {
+      window.handleStart = handleStartWithApiKeyCheck;
     }
   }, []);
 
@@ -108,6 +127,11 @@ function App() {
   };
 
   const handleStart = (tab = "upload") => {
+    const apiKey = getApiKey();
+    if (!apiKey && window.location.hostname.includes('github.io')) {
+      setShowApiKeyModal(true);
+      return;
+    }
     setActiveTab(tab);
     setCurrentView("quiz");
   };

@@ -3,7 +3,7 @@ import { Key, AlertCircle } from 'lucide-react';
 import { setDemoApiKey } from '../config/apiKey.js';
 
 export default function ApiKeyModal({ onClose, onKeySet }) {
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = useState('AIzaSyALx-VO0rfah_NVEv0t-lsxnu7B61nJ6Bw');
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
