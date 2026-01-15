@@ -1,5 +1,6 @@
 // src/App.jsx
 import { useState, useEffect } from "react";
+import { getApiKey } from "./config/apiKey.js";
 import {
   Brain,
   Upload,
@@ -60,6 +61,15 @@ function App() {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Check for API key on mount
+  useEffect(() => {
+    const apiKey = getApiKey();
+    if (!apiKey && window.location.hostname.includes('github.io')) {
+      // Show API key modal for GitHub Pages deployment
+      setShowApiKeyModal(true);
+    }
   }, []);
 
   // Modernized Developer info
@@ -465,6 +475,13 @@ function App() {
         ) : (
           <Documentation />
         )}
+        
+        {/* API Key Modal - Global */}
+        <ApiKeyModal
+          isOpen={showApiKeyModal}
+          onClose={() => setShowApiKeyModal(false)}
+          onKeySet={() => setShowApiKeyModal(false)}
+        />
       </div>
     );
   }
